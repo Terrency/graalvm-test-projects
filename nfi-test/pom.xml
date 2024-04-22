@@ -44,4 +44,23 @@
             <scope>runtime</scope>
         </dependency>
     </dependencies>
+    <build>
+        <finalName>modelicalanguage</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.graalvm.truffle</groupId>
+                            <artifactId>truffle-dsl-processor</artifactId>
+                            <version>${graalvm.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

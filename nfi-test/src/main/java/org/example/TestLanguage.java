@@ -8,14 +8,14 @@ import com.oracle.truffle.api.instrumentation.StandardTags;
 import com.oracle.truffle.api.source.Source;
 
 
-@TruffleLanguage.Registration(id = "test", name = "TEST", defaultMimeType = "application/x-mo", dependentLanguages = {"nfi"}, contextPolicy = TruffleLanguage.ContextPolicy.SHARED,  //
+@TruffleLanguage.Registration(id = "test", name = "TEST", characterMimeTypes = "application/x-test", dependentLanguages = {"nfi"}, contextPolicy = TruffleLanguage.ContextPolicy.SHARED,  //
         website = "https://www.graalvm.org/graalvm-as-a-platform/implement-language/")
 @ProvidedTags({StandardTags.CallTag.class, StandardTags.StatementTag.class, StandardTags.RootTag.class, StandardTags.RootBodyTag.class, StandardTags.ExpressionTag.class, DebuggerTags.AlwaysHalt.class, StandardTags.ReadVariableTag.class, StandardTags.WriteVariableTag.class})
 public class TestLanguage extends TruffleLanguage<TestContext> {
     @Override
     protected CallTarget parse(ParsingRequest request) throws Exception {
         Env env = getCurrentContext(this.getClass()).env;
-        String nfiSource = String.format("load '%s'", "liblapack");
+        String nfiSource = String.format("load '%s'", "libs\\liblapack.dll");
         Source source = Source.newBuilder("nfi", nfiSource, "loadLibrary").build();
         CallTarget target = env.parseInternal(source);
         try {
@@ -27,6 +27,6 @@ public class TestLanguage extends TruffleLanguage<TestContext> {
 
     @Override
     protected TestContext createContext(Env env) {
-        return null;
+        return new TestContext(this, env);
     }
 }
