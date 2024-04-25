@@ -7,6 +7,8 @@ import com.oracle.truffle.api.instrumentation.ProvidedTags;
 import com.oracle.truffle.api.instrumentation.StandardTags;
 import com.oracle.truffle.api.source.Source;
 
+import java.nio.file.Path;
+
 
 @TruffleLanguage.Registration(id = "test", name = "TEST", characterMimeTypes = "application/x-test", dependentLanguages = {"nfi"}, contextPolicy = TruffleLanguage.ContextPolicy.SHARED,  //
         website = "https://www.graalvm.org/graalvm-as-a-platform/implement-language/")
@@ -15,10 +17,12 @@ public class TestLanguage extends TruffleLanguage<TestContext> {
     @Override
     protected CallTarget parse(ParsingRequest request) throws Exception {
         Env env = getCurrentContext(this.getClass()).env;
-        String nfiSource = String.format("load '%s'", "libs\\liblapack.dll");
-        Source source = Source.newBuilder("nfi", nfiSource, "loadLibrary").build();
-        CallTarget target = env.parseInternal(source);
         try {
+            String dllPath = Path.of("libs", "liblapack.dll").toAbsolutePath().toString();
+            String nfiSource = String.format("load '%s'", dllPath);
+            Source source = Source.newBuilder("nfi", nfiSource, "loadLibrary").build();
+            CallTarget target = env.parseInternal(source);
+            Object obj = target.call();
             return target;
         } catch (Exception e) {
             return null;

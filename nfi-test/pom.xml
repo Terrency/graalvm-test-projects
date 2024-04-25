@@ -36,6 +36,8 @@
             <groupId>org.graalvm.truffle</groupId>
             <artifactId>truffle-nfi-libffi</artifactId>
             <version>${graalvm.version}</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}\..\libs\truffle-nfi-libffi.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>org.graalvm.truffle</groupId>
